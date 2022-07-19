@@ -83,6 +83,19 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
+							"\r",
+							"var bodyData = JSON.parse(responseBody);\r",
+							"console.log(bodyData)\r",
+							"for (let i = 0; i < bodyData.length; i++) {\r",
+							"    console.log(bodyData[i].id)\r",
+							"    if (bodyData[i].name == 'Assignment board' || bodyData[i].name == 'Test Board') {\r",
+							"        console.log('To be deleted ' + bodyData[i].name)\r",
+							"        pm.collectionVariables.set('boardId', bodyData[i].id)\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"\r",
+							"//pm.environment.set('boardId', )\r",
 							""
 						],
 						"type": "text/javascript"
@@ -124,6 +137,242 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "My Boards to delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var boards = JSON.parse(responseBody); \r",
+							"var boardsToDelete = new Array();\r",
+							"for (let i =  0; i < boards.length; i++) {\r",
+							"    if (boards[i].name == 'Assignment board' || boards[i].name == 'Test Board') {\r",
+							"        boardsToDelete.push(boards[i]);\r",
+							"    }\r",
+							"}\r",
+							"for (let i =  0; i < boardsToDelete.length; i++) {\r",
+							"    console.log(boardsToDelete[i])\r",
+							"}\r",
+							"pm.collectionVariables.set('boards', boardsToDelete)\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/members/me/boards?key={{trelloKey}}&token={{trelloToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{trelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trelloToken}}"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete requested boards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var boards = pm.collectionVariables.get('boards')\r",
+							"    if (boards.length > 1) {\r",
+							"        boards.pop()\r",
+							"        pm.collectionVariables.set(\"boards\", boards)\r",
+							"        postman.setNextRequest(\"Delete requested boards\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var boards = pm.collectionVariables.get('boards')\r",
+							"if (boards.length > 0) {\r",
+							"    console.log('To be deleted ' + boards[boards.length - 1].name)\r",
+							"    pm.collectionVariables.set('boardId', boards[boards.length - 1].id);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/:id?key={{trelloKey}}&token={{trelloToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						":id"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{trelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trelloToken}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{boardId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/:id?key={{trelloKey}}&token={{trelloToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						":id"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{trelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trelloToken}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{boardId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Router",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.iterationData.get('scenario'));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/members/me/boards?key={{trelloKey}}&token={{trelloToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{trelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trelloToken}}"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -154,6 +403,11 @@
 		{
 			"key": "collectionVar",
 			"value": "test****",
+			"type": "string"
+		},
+		{
+			"key": "boards",
+			"value": "",
 			"type": "string"
 		}
 	]
