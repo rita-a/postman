@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "83bf6029-f6ed-4f07-88cb-03fd43edc7a0",
+		"name": "authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21853483"
+	},
+	"item": [
+		{
+			"name": "LmsAdmin",
+			"item": [
+				{
+					"name": "Authentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Assert status code 200 and body not empty.\", () => ",
+									"{",
+									"    pm.response.to.have.status(200)",
+									"    pm.response.to.have.body",
+									"",
+									"})",
+									"pm.test(\"Set all cookies.\", () =>",
+									"{",
+									"    ",
+									"    //pm.environment.set('CRx', pm.cookies.get('CRx'))",
+									"    pm.environment.set('admsid', pm.cookies.get('admsid'))",
+									"    var encpwdFixed = pm.cookies.get('encpwd').replace(/\\+/g, \"%2B\")",
+									"    pm.environment.set('encpwd', encpwdFixed)",
+									"    //pm.environment.set('rightES5', pm.cookies.get('rightES5'))",
+									"    pm.environment.set('rights', pm.cookies.get('rights'))",
+									"    pm.environment.set('siteLocale', pm.cookies.get('siteLocale'))",
+									"    pm.environment.set('user', pm.cookies.get('user'))",
+									"    pm.environment.set('wtk', pm.cookies.get('wtk'))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "{{LmsUrl}}/admin/index.shtml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "type",
+									"value": "login",
+									"type": "text"
+								},
+								{
+									"key": "encpwd",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "{{LmsAdmin}}",
+									"type": "text"
+								},
+								{
+									"key": "pwd",
+									"value": "{{LmsPwd}}",
+									"type": "text"
+								},
+								{
+									"key": "admsid",
+									"value": "{{LmsAdminPin}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{authUrl}}",
+							"host": [
+								"{{authUrl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// retrieve credentials",
+					"pm.collectionVariables.set('LmsAdmin', pm.iterationData.get('LmsAdmin'));",
+					"pm.collectionVariables.set('LmsPwd', pm.iterationData.get('LmsPwd'));",
+					"pm.collectionVariables.set('LmsAdminPin', pm.iterationData.get('LmsAdminPin'));",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LmsAdmin",
+			"value": ""
+		},
+		{
+			"key": "LmsPwd",
+			"value": ""
+		},
+		{
+			"key": "LmsAdminPin",
+			"value": ""
+		}
+	]
+}
