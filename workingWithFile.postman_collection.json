@@ -8,9 +8,27 @@
 	"item": [
 		{
 			"name": "New Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "trello.com",
+					"host": [
+						"trello",
+						"com"
+					]
+				}
 			},
 			"response": []
 		}
@@ -21,7 +39,8 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"console.log(\"TESTING\")"
+					"console.log(\"TESTING\")",
+					"console.log(pm.iterationData.get('name'));"
 				]
 			}
 		},
