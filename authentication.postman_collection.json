@@ -24,6 +24,7 @@
 									"})",
 									"",
 									"console.log(\"BODY\");",
+									"console.log(pm.request.body);",
 									"console.log(pm.response.headers);",
 									"",
 									"pm.test(\"Set all cookies.\", () =>",
