@@ -26,6 +26,7 @@
 									"{",
 									"    ",
 									"    //pm.environment.set('CRx', pm.cookies.get('CRx'))",
+									"    console.log(pm.cookies.get('admsid'))",
 									"    pm.environment.set('admsid', pm.cookies.get('admsid'))",
 									"    var encpwdFixed = pm.cookies.get('encpwd').replace(/\\+/g, \"%2B\")",
 									"    pm.environment.set('encpwd', encpwdFixed)",
@@ -34,7 +35,9 @@
 									"    pm.environment.set('siteLocale', pm.cookies.get('siteLocale'))",
 									"    pm.environment.set('user', pm.cookies.get('user'))",
 									"    pm.environment.set('wtk', pm.cookies.get('wtk'))",
-									"})"
+									"})",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
